@@ -20,8 +20,8 @@ VERSION 1.2 :
 
 - Renommage du script Scan_réseau et intégration d'autres fonctionnalitées.
 - amélioration du temps de scan en faisant appel à Get-WmiObject (2 min 30 s environ pour un réseau en /24)
-- intégration du fichier listeOUI.txt pour la liste des fabricants des cartes réseaux selon les adresses Mac.
-
+- intégration du fichier liste_OUI.txt (Organizationally Unique Identifier) pour la liste des fabricants des cartes réseaux selon les adresses Mac.
+- Le fichier Liste_OUI.txt doit être placé dans le même répertoire que le script.
 
   Sources : 
 
@@ -50,6 +50,7 @@ VERSION 1.2 :
 
   “1. Scan de tout le réseau”
 - detecte le réseau sur lequel vous vous trouver et scan toutes les machines de celui-ci.
+- Génère un fichier "résultat_scan.txt" dans le même répertoire que le script.
 
 <img width="517" alt="1" src="https://user-images.githubusercontent.com/105367565/188311028-a1294840-79e7-4c6e-b6af-adb801ec585f.png">
 
