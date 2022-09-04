@@ -1,6 +1,6 @@
 ﻿   <#
 .NOTES
-	NAME:	Scan_Reseau.ps1
+	NAME:	Network_PI.ps1
     VERSION : 1.0  17/05/2022
     VERSION : 1.2  04/09/2022
 	AUTHOR:	Frédéric Puren
