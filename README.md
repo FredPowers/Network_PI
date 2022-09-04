@@ -49,24 +49,24 @@ VERSION 1.2 :
 
 
   “1. Scan de tout le réseau”
-- detecte le réseau sur lequel vous vous trouver et scan toutes les machines de celui-ci.
+- detecte le réseau sur lequel vous vous trouvez et scan toutes les machines de celui-ci.
 - Génère un fichier "résultat_scan.txt" dans le même répertoire que le script.
 
 <img width="517" alt="1" src="https://user-images.githubusercontent.com/105367565/188311028-a1294840-79e7-4c6e-b6af-adb801ec585f.png">
 
 
   "2. Scan des Ports ouverts sur tout le réseau"
-- detecte le réseau sur lequel vous vous trouver et scan certains ports ( il est possible d'ajouter des ports en modifiants le script)
+- detecte le réseau sur lequel vous vous trouvez et scan certains ports ( il est possible d'ajouter des ports en modifiants le script)
 
 <img width="468" alt="2" src="https://user-images.githubusercontent.com/105367565/188311042-e9101c74-58fc-4b0e-95c9-2c2a05e32d7f.png">
 
 
   "3. Scan réseau sur une plage IP spécifique"
-Idem que le 1. mais vous choississez la premiere et derniere IP pour le scan.
+Idem que le 1. mais vous choisissez la premiere et derniere IP pour le scan.
 
 
   "4. Scan des ports sur une plage IP spécifique"
-Idem que le 2 mais vous choississez la premiere et derniere IP pour le scan des ports.
+Idem que le 2 mais vous choisissez la premiere et derniere IP pour le scan des ports.
 
 
   "5. Enregistrement DNS + Localisation de l'IP"
