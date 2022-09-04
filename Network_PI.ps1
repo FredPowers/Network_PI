@@ -42,21 +42,21 @@ VERSION 1.2 :
 
 
   “1. Scan de tout le réseau”
-- detecte le réseau sur lequel vous vous trouver et scan toutes les machines de celui-ci.
+- detecte le réseau sur lequel vous vous trouvez et scan toutes les machines de celui-ci.
 
 
   "2. Scan des Ports ouverts sur tout le réseau"
 
-- detecte le réseau sur lequel vous vous trouver et scan certains ports ( il est possible d'ajouter des ports en modifiants le script)
+- detecte le réseau sur lequel vous vous trouvez et scan certains ports ( il est possible d'ajouter des ports en modifiant le script)
 
 
 
   "3. Scan réseau sur une plage IP spécifique"
-Idem que le 1. mais vous choississez la premiere et derniere IP pour le scan.
+Idem que le 1. mais vous choisissez la premiere et derniere IP pour le scan.
 
   "4. Scan des ports sur une plage IP spécifique"
 
-Idem que le 2 mais vous choississez la premiere et derniere IP pour le scan des ports.
+Idem que le 2 mais vous choisissez la premiere et derniere IP pour le scan des ports.
 
   "5. Enregistrement DNS + Localisation de l'IP"
   "6. Afficher les mots de passe WiFi enregistrés"
