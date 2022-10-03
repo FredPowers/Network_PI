@@ -1,82 +1,4 @@
-﻿   <#
-.NOTES
-	NAME:	Network_PI.ps1
-    VERSION : 1.0  17/05/2022
-    VERSION : 1.2  04/09/2022
-	AUTHOR:	Frédéric Puren
-
-
-VERSION 1.1 :
-
-- Amélioration du script en intégrant une fonction pour le calcul réseau.
-- Ajout du scope d'adresse IP d'un second réseau si un VPN est connecté.
-
-
-VERSION 1.2 :
-
-- Renommage du script Scan_réseau et intégration d'autres fonctionnalitées.
-- amélioration du temps de scan en faisant appel à Get-WmiObject (2 min 30 s environ pour un réseau en /24)
-- intégration du fichier listeOUI.txt pour la liste des fabricants des cartes réseaux selon les adresses Mac.
-
-
-  Sources : 
-
-  faire un menu : https://wiki-tech.io/Scripting/Powershell/Menu
-
-  séparer des chaines de caractère : https://www.it-connect.fr/powershell-et-split-decouper-une-chaine-de-caracteres/
-
-  extraire une chaine de caractère : https://www.it-connect.fr/powershell-et-substring-extraire-une-chaine-dune-chaine/
-
-  padleft, padright : https://4sysops.com/archives/how-to-add-leading-and-ending-zeroes-to-strings-in-powershell/
-
-  créer une fonction : https://techexpert.tips/fr/powershell-fr/powershell-creation-dune-fonction/
-  
-  Scan réseau en /24 : https://www.pentest.school/blog/scanner-un-reseau-avec-powershell
-
-  Ping avec Get-WmiObject : https://powershell.one/wmi/root/cimv2/win32_pingstatus
-
-  Scan de ports : https://jonlabelle.com/snippets/view/powershell/powershell-script-to-scan-open-ports
-
-  Localisation d'une IP : https://www.1formatik.com/7467/comment-localiser-une-adresse-ip-avec-powershell
-
-
-
-  “1. Scan de tout le réseau”
-- detecte le réseau sur lequel vous vous trouvez et scan toutes les machines de celui-ci.
-
-
-  "2. Scan des Ports ouverts sur tout le réseau"
-
-- detecte le réseau sur lequel vous vous trouvez et scan certains ports ( il est possible d'ajouter des ports en modifiant le script)
-
-
-
-  "3. Scan réseau sur une plage IP spécifique"
-Idem que le 1. mais vous choisissez la premiere et derniere IP pour le scan.
-
-  "4. Scan des ports sur une plage IP spécifique"
-
-Idem que le 2 mais vous choisissez la premiere et derniere IP pour le scan des ports.
-
-  "5. Enregistrement DNS + Localisation de l'IP"
-  "6. Afficher les mots de passe WiFi enregistrés"
-  "7. Recherche Google Dorks"
-  "8. Traceroute avec localisation"
-  "9. Vérifier si des partages sont actifs"
-  "10.Scan Windows Defender"
-  "11.Vérifier l'historique Powershell"
-affiche les dernière commande powershell exécuter (4096 max par défaut)
-
-#>
-
- 
- 
- 
- 
- # demande de démarrage du sccript en administrateur
- 
-    If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-{   
+    If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")){   
 $arguments = "& '" + $myinvocation.mycommand.definition + "'"
 Start-Process powershell -Verb runAs -ArgumentList $arguments
 Break
@@ -84,7 +6,7 @@ Break
 
 
 
-# fonction calcul réseau
+
 function Calcul_Reseaux($AdresseIP,$Masque) {
 
     # Calcul
@@ -768,17 +690,19 @@ write-host ""
   Do{
   
   Write-Host "################ MENU ##################"
-  write-host “1. Scan de tout le réseau” -ForegroundColor Cyan
-  write-host "2. Scan des Ports ouverts sur tout le réseau" -ForegroundColor DarkCyan
-  write-host "3. Scan réseau sur une plage IP spécifique" -ForegroundColor Cyan
-  write-host "4. Scan des ports sur une plage IP spécifique" -ForegroundColor DarkCyan
-  Write-Host "5. Enregistrement DNS + Localisation de l'IP" -ForegroundColor Cyan
-  write-host "6. Afficher les mots de passe WiFi enregistrés" -ForegroundColor DarkCyan
-  write-host "7. Recherche Google Dorks" -ForegroundColor Cyan
-  write-host "8. Traceroute avec localisation" -ForegroundColor DarkCyan
-  write-host "9. Vérifier si des partages sont actifs" -ForegroundColor Cyan
-  Write-Host "10.Scan Windows Defender" -ForegroundColor DarkCyan
-  write-host "11.Vérifier l'historique Powershell" -ForegroundColor Cyan
+  Write-Host "1.  Configuration Réseau du PC" -ForegroundColor DarkCyan
+  write-host “2.  Scan de tout le réseau” -ForegroundColor Cyan
+  write-host "3.  Scan des Ports ouverts sur tout le réseau" -ForegroundColor DarkCyan
+  write-host "4.  Scan réseau sur une plage IP spécifique" -ForegroundColor Cyan
+  write-host "5.  Scan des ports sur une plage IP spécifique" -ForegroundColor DarkCyan
+  Write-Host "6.  Enregistrement DNS + Localisation de l'IP" -ForegroundColor Cyan
+  write-host "7.  Afficher les mots de passe WiFi enregistrés" -ForegroundColor DarkCyan
+  write-host "8.  Recherche Google Dorks" -ForegroundColor Cyan
+  write-host "9.  Traceroute avec localisation" -ForegroundColor DarkCyan
+  write-host "10. Vérifier si des partages sont actifs" -ForegroundColor Cyan
+  Write-Host "11. Scan Windows Defender" -ForegroundColor DarkCyan
+  write-host "12. Vérifier l'historique Powershell" -ForegroundColor Cyan
+  write-host "13. Connexion ssh" -ForegroundColor DarkCyan
   Write-Host "x. Exit" -ForegroundColor Red
   Write-Host "########################################"
   Write-Host ""
@@ -787,9 +711,236 @@ write-host ""
   switch ($choix){
 
 ####################################################################################################
-# “1. Scan réseau”
+# “1. Configuration réseau du PC”
    
     1{
+    
+    
+    #interface physique active
+    $InterfaceUp = (Get-NetAdapter -Physical | where {$_.status -like "Up"}).Name
+    $MasqueCIDR = get-netipaddress | where {$_.interfaceAlias -eq $InterfaceUp -and $_.AddressFamily -eq "IPv4"} | select -ExpandProperty PrefixLength -ErrorAction SilentlyContinue
+    $Mac = Get-netadapter -Name $InterfaceUp -ErrorAction SilentlyContinue | select -ExpandProperty MacAddress -ErrorAction SilentlyContinue
+    $DHCP = Get-NetIPInterface | where {$_.InterfaceAlias -eq $InterfaceUp -and $_.AddressFamily -eq "IPv4"} | select -ExpandProperty Dhcp -ErrorAction SilentlyContinue
+    $AdresseIPHost = Get-NetIPAddress | where {$_.interfaceAlias -eq $InterfaceUp -and $_.AddressFamily -eq "IPv4"} | select -ExpandProperty IPAddress -ErrorAction SilentlyContinue
+
+    if ($InterfaceUp -eq $null){
+    write-host "le PC n'est pas connecté au réseau"
+    Write-Host ""
+    pause
+    Cls
+    break
+    }
+
+    if ($MasqueCIDR -eq 0)
+    {
+    $MasqueHost = "0.0.0.0"
+    }
+
+    if ($MasqueCIDR -eq 1)
+    {
+    $MasqueHost = "128.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 2)
+    {
+    $MasqueHost = "192.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 3)
+    {
+    $MasqueHost = "224.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 4)
+    {
+    $MasqueHost = "140.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 5)
+    {
+    $MasqueHost = "148.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 6)
+    {
+    $MasqueHost = "252.0.0.0"
+    }
+    
+    if ($MasqueCIDR -eq 7)
+    {
+    $MasqueHost = "254.0.0.0"
+    }
+ 
+    if ($MasqueCIDR -eq 8)
+    {
+    $MasqueHost = "255.0.0.0"
+    }
+
+    if ($MasqueCIDR -eq 9)
+    {
+    $MasqueHost = "255.128.0.0"
+    }
+
+    if ($MasqueCIDR -eq 10)
+    {
+    $MasqueHost = "255.192.0.0"
+    }
+
+    if ($MasqueCIDR -eq 11)
+    {
+    $MasqueHost = "255.224.0.0"
+    }
+
+    if ($MasqueCIDR -eq 12)
+    {
+    $MasqueHost = "255.240.0.0"
+    }
+
+    if ($MasqueCIDR -eq 13)
+    {
+    $MasqueHost = "255.248.0.0"
+    }
+
+    if ($MasqueCIDR -eq 14)
+    {
+    $MasqueHost = "255.252.0.0"
+    }
+
+    if ($MasqueCIDR -eq 15)
+    {
+    $MasqueHost = "255.254.0.0"
+    }
+
+    if ($MasqueCIDR -eq 16)
+    {
+    $MasqueHost = "255.255.0.0"
+    }
+
+    if ($MasqueCIDR -eq 17)
+    {
+    $MasqueHost = "255.255.128.0"
+    }
+
+    if ($MasqueCIDR -eq 18)
+    {
+    $MasqueHost = "255.255.192.0"
+    }
+
+    if ($MasqueCIDR -eq 19)
+    {
+    $MasqueHost = "255.255.224.0"
+    }
+
+    if ($MasqueCIDR -eq 20)
+    {
+    $MasqueHost = "255.255.240.0"
+    }
+
+    if ($MasqueCIDR -eq 21)
+    {
+    $MasqueHost = "255.255.248.0"
+    }
+
+    if ($MasqueCIDR -eq 22)
+    {
+    $MasqueHost = "255.255.252.0"
+    }
+
+    if ($MasqueCIDR -eq 23)
+    {
+    $MasqueHost = "255.255.254.0"
+    }
+
+    if ($MasqueCIDR -eq 24)
+    {
+    $MasqueHost = "255.255.255.0"
+    }
+
+    if ($MasqueCIDR -eq 25)
+    {
+    $MasqueHost = "255.255.255.128"
+    }
+
+    if ($MasqueCIDR -eq 26)
+    {
+    $MasqueHost = "255.255.255.192"
+    }
+
+
+    if ($MasqueCIDR -eq 27)
+    {
+    $MasqueHost = "255.255.255.224"
+    }
+
+    if ($MasqueCIDR -eq 28)
+    {
+    $MasqueHost = "255.255.255.240"
+    }
+
+    if ($MasqueCIDR -eq 29)
+    {
+    $MasqueHost = "255.255.255.248"
+    }
+
+    if ($MasqueCIDR -eq 30)
+    {
+    $MasqueHost = "255.255.255.252"
+    }
+
+    if ($MasqueCIDR -eq 31)
+    {
+    $MasqueHost = "255.255.255.254"
+    }
+
+    if ($MasqueCIDR -eq 32)
+    {
+    $MasqueHost = "255.255.255.255"
+    }
+
+
+
+
+    # ----------------------------------------------------------------
+
+    Write-Host ""
+
+    write-Host "Configuration IP actuelle de la machine :" -ForegroundColor Green
+
+    write-host ""
+
+
+    #Get-NetIPConfiguration | where InterfaceAlias -eq $InterfaceUp | select-object IPv4Address
+    $IP_Host = (Get-NetIPAddress -AddressFamily IPV4 -InterfaceAlias $InterfaceUp).IPAddress
+    $GW_Host = (Get-NetRoute -InterfaceAlias $InterfaceUp -DestinationPrefix 0.0.0.0/0).NextHop
+    $DNS_Host = (Get-DnsClientServerAddress -InterfaceAlias $InterfaceUp -AddressFamily IPv4).ServerAddresses
+
+    Write-Host "Adresse IP           : $IP_Host"
+    write-host "Masque sous-réseaux  : $MasqueHost / CIDR: $MasqueCIDR"
+    Write-Host "Passerelle           : $GW_Host"
+    Write-Host "DNS                  : $DNS_Host"
+    Write-Host "Adresse MAC          : $Mac"  
+    Write-Host "DHCP                 : $DHCP"
+
+    Write-Host ""
+    write-host ""
+    Write-Host "------------ Information sur le réseau ------------" -ForegroundColor Cyan
+    write-host ""
+
+    Calcul_Reseaux $AdresseIPHost $MasqueHost
+
+    Write-Host "---------------------------------------------------" -ForegroundColor Cyan
+
+    Pause
+
+    Cls
+}
+
+
+
+####################################################################################################
+# “2. Scan réseau”
+   
+    2{
     
     
     #interface physique active
@@ -1074,7 +1225,7 @@ $AdresseIP = "$object3.$z"
 
 
 
-$PingStatus = (Gwmi -Class Win32_PingStatus -Filter "Address='$AdresseIP' and Timeout=50").StatusCode
+$PingStatus = (Get-CimInstance -Class Win32_PingStatus -Filter "Address='$AdresseIP' and Timeout=50").StatusCode
 
 $Location = $PSScriptRoot
 
@@ -1082,10 +1233,12 @@ $Location = $PSScriptRoot
 if (($PingStatus -eq 0) -and ($AdresseIP -ne $AdresseIP_dernier_host))
 {
 
+$Domaine = (gwmi WIN32_ComputerSystem).Domain
 $NomHote = Resolve-DnsName $AdresseIP -ErrorAction SilentlyContinue | select -ExpandProperty NameHost
-$CettemMachine = hostname
+$CetteMachine = hostname
+$FQDN = "$CetteMachine.$Domaine"
 
-if ($CettemMachine -eq $NomHote){
+if (($CetteMachine -eq $NomHote) -or ($FQDN -eq $NomHote)){
 
 write-Host "@@ $AdresseIP   $Mac   $NomHote (cette machine)" -ForegroundColor Green
 $Mac3Octets = $Mac.Substring(0,8)
@@ -1146,9 +1299,9 @@ if (($PingStatus -eq 0) -and ($AdresseIP -eq $AdresseIP_dernier_host))
 
 
 $NomHote = Resolve-DnsName $AdresseIP -ErrorAction SilentlyContinue | select -ExpandProperty NameHost
-$CettemMachine = hostname
+$CetteMachine = hostname
 
-if ($CettemMachine -eq $NomHote){
+if (($CetteMachine -eq $NomHote) -or ($FQDN -eq $NomHote)){
 
 write-Host "@@ $AdresseIP   $Mac   $NomHote (cette machine)" -ForegroundColor Green
 $Mac3Octets = $Mac.Substring(0,8)
@@ -1253,9 +1406,9 @@ if ($AdresseIP -eq $AdresseIP_dernier_host) {break}
 
 
 ####################################################################################################
-# “2. Scan ports des IP de tout le réseau”
+# “3. Scan ports des IP de tout le réseau”
    
-    2{
+    3{
     
     
     #interface physique active
@@ -1267,169 +1420,136 @@ if ($AdresseIP -eq $AdresseIP_dernier_host) {break}
 
 
 
-    if ($MasqueCIDR -eq 0)
-    {
+    if ($MasqueCIDR -eq 0){
     $MasqueHost = "0.0.0.0"
     }
 
-    if ($MasqueCIDR -eq 1)
-    {
+    if ($MasqueCIDR -eq 1){
     $MasqueHost = "128.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 2)
-    {
+    if ($MasqueCIDR -eq 2){
     $MasqueHost = "192.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 3)
-    {
+    if ($MasqueCIDR -eq 3){
     $MasqueHost = "224.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 4)
-    {
+    if ($MasqueCIDR -eq 4){
     $MasqueHost = "140.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 5)
-    {
+    if ($MasqueCIDR -eq 5){
     $MasqueHost = "148.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 6)
-    {
+    if ($MasqueCIDR -eq 6){
     $MasqueHost = "252.0.0.0"
     }
     
-    if ($MasqueCIDR -eq 7)
-    {
+    if ($MasqueCIDR -eq 7){
     $MasqueHost = "254.0.0.0"
     }
  
-    if ($MasqueCIDR -eq 8)
-    {
+    if ($MasqueCIDR -eq 8){
     $MasqueHost = "255.0.0.0"
     }
 
-    if ($MasqueCIDR -eq 9)
-    {
+    if ($MasqueCIDR -eq 9){
     $MasqueHost = "255.128.0.0"
     }
 
-    if ($MasqueCIDR -eq 10)
-    {
+    if ($MasqueCIDR -eq 10){
     $MasqueHost = "255.192.0.0"
     }
 
-    if ($MasqueCIDR -eq 11)
-    {
+    if ($MasqueCIDR -eq 11){
     $MasqueHost = "255.224.0.0"
     }
 
-    if ($MasqueCIDR -eq 12)
-    {
+    if ($MasqueCIDR -eq 12){
     $MasqueHost = "255.240.0.0"
     }
 
-    if ($MasqueCIDR -eq 13)
-    {
+    if ($MasqueCIDR -eq 13){
     $MasqueHost = "255.248.0.0"
     }
 
-    if ($MasqueCIDR -eq 14)
-    {
+    if ($MasqueCIDR -eq 14){
     $MasqueHost = "255.252.0.0"
     }
 
-    if ($MasqueCIDR -eq 15)
-    {
+    if ($MasqueCIDR -eq 15){
     $MasqueHost = "255.254.0.0"
     }
 
-    if ($MasqueCIDR -eq 16)
-    {
+    if ($MasqueCIDR -eq 16){
     $MasqueHost = "255.255.0.0"
     }
 
-    if ($MasqueCIDR -eq 17)
-    {
+    if ($MasqueCIDR -eq 17){
     $MasqueHost = "255.255.128.0"
     }
 
-    if ($MasqueCIDR -eq 18)
-    {
+    if ($MasqueCIDR -eq 18){
     $MasqueHost = "255.255.192.0"
     }
 
-    if ($MasqueCIDR -eq 19)
-    {
+    if ($MasqueCIDR -eq 19){
     $MasqueHost = "255.255.224.0"
     }
 
-    if ($MasqueCIDR -eq 20)
-    {
+    if ($MasqueCIDR -eq 20){
     $MasqueHost = "255.255.240.0"
     }
 
-    if ($MasqueCIDR -eq 21)
-    {
+    if ($MasqueCIDR -eq 21){
     $MasqueHost = "255.255.248.0"
     }
 
-    if ($MasqueCIDR -eq 22)
-    {
+    if ($MasqueCIDR -eq 22){
     $MasqueHost = "255.255.252.0"
     }
 
-    if ($MasqueCIDR -eq 23)
-    {
+    if ($MasqueCIDR -eq 23){
     $MasqueHost = "255.255.254.0"
     }
 
-    if ($MasqueCIDR -eq 24)
-    {
+    if ($MasqueCIDR -eq 24){
     $MasqueHost = "255.255.255.0"
     }
 
-    if ($MasqueCIDR -eq 25)
-    {
+    if ($MasqueCIDR -eq 25){
     $MasqueHost = "255.255.255.128"
     }
 
-    if ($MasqueCIDR -eq 26)
-    {
+    if ($MasqueCIDR -eq 26){
     $MasqueHost = "255.255.255.192"
     }
 
 
-    if ($MasqueCIDR -eq 27)
-    {
+    if ($MasqueCIDR -eq 27){
     $MasqueHost = "255.255.255.224"
     }
 
-    if ($MasqueCIDR -eq 28)
-    {
+    if ($MasqueCIDR -eq 28){
     $MasqueHost = "255.255.255.240"
     }
 
-    if ($MasqueCIDR -eq 29)
-    {
+    if ($MasqueCIDR -eq 29){
     $MasqueHost = "255.255.255.248"
     }
 
-    if ($MasqueCIDR -eq 30)
-    {
+    if ($MasqueCIDR -eq 30){
     $MasqueHost = "255.255.255.252"
     }
 
-    if ($MasqueCIDR -eq 31)
-    {
+    if ($MasqueCIDR -eq 31){
     $MasqueHost = "255.255.255.254"
     }
 
-    if ($MasqueCIDR -eq 32)
-    {
+    if ($MasqueCIDR -eq 32){
     $MasqueHost = "255.255.255.255"
     }
 
@@ -1659,9 +1779,9 @@ if ($AdresseIP -eq $AdresseIP_dernier_host) {break}
 }
 
 ####################################################################################################
-# “3. Scan réseau sur une plage IP spécifique”
+# “4. Scan réseau sur une plage IP spécifique”
    
-    3{
+    4{
     
     
     #interface physique active
@@ -2237,9 +2357,9 @@ if ($AdresseIP -eq $AdresseFin) {break}
 
 
 #############################################################################################################
-# "4. Scan ports sur une plage IP spécifique"
+# "5. Scan ports sur une plage IP spécifique"
     
-    4{
+    5{
 
 
 
@@ -2743,36 +2863,29 @@ $d_int = [int]$d
 
 $valeur = $a..255 | % {"$($_)"}
 
-Foreach ($object1 in $valeur)
-{
+Foreach ($object1 in $valeur){
 
-For ($x=$b_int;$x -lt 256;$x++)
-{
+For ($x=$b_int;$x -lt 256;$x++){
 
 $Adresse2octets = "$object1.$x"
 
 
 
-Foreach ($object2 in $Adresse2octets)
-{
+Foreach ($object2 in $Adresse2octets){
 
-For ($y=$c_int;$y -lt 256;$y++)
-{
+For ($y=$c_int;$y -lt 256;$y++){
 $Adresse3octets = "$object2.$y"
 
 
-Foreach ($object3 in $Adresse3octets)
-{
+Foreach ($object3 in $Adresse3octets){
 
-For ($z=$d_int;$z -lt 256;$z++)
-{
+For ($z=$d_int;$z -lt 256;$z++){
 $AdresseIP = "$object3.$z"
 
 
 $PingStatus = Get-CimInstance -Class Win32_PingStatus -Filter "Address='$AdresseIP' and Timeout=50"| select -Expandproperty StatusCode
 
-if (($PingStatus -eq 0) -and ($AdresseIP -ne $AdresseFin))
-{
+if (($PingStatus -eq 0) -and ($AdresseIP -ne $AdresseFin)){
 
 
 $portrange = 21,22,23,53,69,80,139,161,443,445,548,1433,3306,3389,5900
@@ -2783,16 +2896,14 @@ $timeout_ms = 5
  
         Write-Host "$AdresseIP est connecté... vérification des ports ouverts..." -ForegroundColor Green
  
-        foreach ($port in $portrange)
-        {
+        foreach ($port in $portrange){
             $ErrorActionPreference = 'SilentlyContinue'
             $socket = new-object System.Net.Sockets.TcpClient
             $connect = $socket.BeginConnect($AdresseIP, $port, $null, $null)
             $tryconnect = Measure-Command { $success = $connect.AsyncWaitHandle.WaitOne($timeout_ms, $true) } | % totalmilliseconds
             $tryconnect | Out-Null
  
-            if ($socket.Connected)
-            {
+            if ($socket.Connected){
                 "$AdresseIP is listening on port $port (Response Time: $tryconnect ms)"
                 $socket.Close()
                 $socket.Dispose()
@@ -2806,8 +2917,7 @@ $timeout_ms = 5
 
 
 
-if (($PingStatus -eq 0) -and ($AdresseIP -eq $AdresseFin))
-{
+if (($PingStatus -eq 0) -and ($AdresseIP -eq $AdresseFin)){
 
 
 $portrange = 21,22,23,53,69,80,139,161,443,445,548,1433,3306,3389,5900
@@ -2818,16 +2928,14 @@ $timeout_ms = 5
  
         Write-Host "$AdresseIP est connecté... vérification des ports ouverts..." -ForegroundColor Green
  
-        foreach ($port in $portrange)
-        {
+        foreach ($port in $portrange){
             $ErrorActionPreference = 'SilentlyContinue'
             $socket = new-object System.Net.Sockets.TcpClient
             $connect = $socket.BeginConnect($AdresseIP, $port, $null, $null)
             $tryconnect = Measure-Command { $success = $connect.AsyncWaitHandle.WaitOne($timeout_ms, $true) } | % totalmilliseconds
             $tryconnect | Out-Null
  
-            if ($socket.Connected)
-            {
+            if ($socket.Connected){
                 "$AdresseIP is listening on port $port (Response Time: $tryconnect ms)"
                 $socket.Close()
                 $socket.Dispose()
@@ -2847,8 +2955,7 @@ Cls
 }
 
 
-if (($PingStatus -ne 0) -and ($AdresseIP -eq $AdresseFin))
-{
+if (($PingStatus -ne 0) -and ($AdresseIP -eq $AdresseFin)){
 
 write-Host "###### Fin du scan ###### Plage IP scannée : $AdresseDepart --> $AdresseFin" -ForegroundColor Yellow
 
@@ -2856,25 +2963,39 @@ pause
 Cls
 
 }
-if ($AdresseIP -eq $AdresseFin) {break}
+if ($AdresseIP -eq $AdresseFin) {
+    break
 }
-if ($AdresseIP -eq $AdresseFin) {break}
 }
-if ($AdresseIP -eq $AdresseFin) {break}
+if ($AdresseIP -eq $AdresseFin) {
+    break
 }
-if ($AdresseIP -eq $AdresseFin) {break}
 }
-if ($AdresseIP -eq $AdresseFin) {break}
+if ($AdresseIP -eq $AdresseFin) {
+    break
 }
-if ($AdresseIP -eq $AdresseFin) {break}
 }
-if ($AdresseIP -eq $AdresseFin) {break} 
+if ($AdresseIP -eq $AdresseFin) {
+    break
+}
+}
+if ($AdresseIP -eq $AdresseFin) {
+    break
+}
+}
+if ($AdresseIP -eq $AdresseFin) {
+    break
+}
+}
+if ($AdresseIP -eq $AdresseFin) {
+    break
+} 
 }
 
 #####################################################################################
-# 5. Enregistrement DNS + Localisation de l'IP
+# 6. Enregistrement DNS + Localisation de l'IP
 
-    5{
+    6{
 
 $ErrorActionPreference = 'SilentlyContinue'
 
@@ -2942,9 +3063,9 @@ cls
 
 
 #####################################################################################
-# 6. Afficher les mots de passe WiFi enregistrés
+# 7. Afficher les mots de passe WiFi enregistrés
 
-    6{
+    7{
 
 
 $SSID = netsh wlan show profiles
@@ -2965,9 +3086,9 @@ Cls
 }
 
 #####################################################################################
-# 7. Recherche Google Dorks
+# 8. Recherche Google Dorks
 
-    7{
+    8{
 
       Do{
   
@@ -3062,9 +3183,9 @@ Laisser vide pour ne pas activer cette option"
 
 
 #####################################################################################
-# "8. traceroute
+# "9. traceroute
 
-    8{
+    9{
 
           Do{
   
@@ -3120,10 +3241,10 @@ Laisser vide pour ne pas activer cette option"
     }
 
 #####################################################################################
-# 9. Vérifier si des partages sont actifs
+# 10. Vérifier si des partages sont actifs
 
 
-    9{
+    10{
 
 Write-Host ""
 write-host "######################## PARTAGES ########################" -ForegroundColor Green  
@@ -3140,7 +3261,8 @@ Write-Host "########### autorisations NTFS sur les partages ##########" -Foregro
 
 $CheminPartage = (Get-SmbShare).Path
 
-$CheminPartage | Foreach-Object {Get-Acl -Path "$_." | fl Path, AccessToString}
+$CheminPartage | Foreach-Object {Get-Acl -Path "$_." | fl Path, AccessToString
+}
 
     pause
 
@@ -3150,9 +3272,9 @@ $CheminPartage | Foreach-Object {Get-Acl -Path "$_." | fl Path, AccessToString}
 
 
 #####################################################################################
-# 10. Scan antivirus Windows Defender
+# 11. Scan antivirus Windows Defender
 
-    10{
+    11{
 
              Do{
   
@@ -3218,9 +3340,9 @@ Cls
     }
 
 #####################################################################################
-# 11. Vérifier l'historique PowerShell
+# 12. Vérifier l'historique PowerShell
 
-    11{
+    12{
     type -Path "$env:UserProfile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt"
 
     pause
@@ -3230,6 +3352,46 @@ Cls
 
 
 #####################################################################################
+# 13. Connexion ssh
+
+    13{
+
+    write-host "Vérification si le client OpenSSH est installé" -ForegroundColor Green
+    Write-Host ""
+
+    $EtatOpenSSH = (Get-WindowsCapability -Online | where name -Match OpenSSH.Client).State
+    $NomOpenSSH = (Get-WindowsCapability -Online | where name -Match OpenSSH.Client).Name
+
+    if ($EtatOpenSSH -like "Installed"){
+
+    write-host "Le Client OpenSSH est déjà installé"
+    write-host ""
+    
+    }
+
+    else{
+
+    $Reponse = Read-Host "Le client Open SSH n'est pas installé, voulez-vous l'installer ? O/N"
+
+    if ($Reponse -eq "O"){
+    Add-WindowsCapability -Online -Name $NomOpenSSH
+    }
+
+    else{exit}
+    }
+
+    $PC = Read-Host "entrer l'IP ou le nom de la machine distante"
+    Write-Host ""
+    $Login = Read-Host "entrer le login qui doit se connecter"
+    Write-Host ""
+
+    Start-Process "powershell.exe" "/c ssh $Login@$PC"
+
+    Cls
+    }
+
+
+######################################################################################
 # "x. exit"
 
     x{
